@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SparQd Email Admin - Login</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-header {
+            background: linear-gradient(135deg, #2c5aa0 0%, #1e4080 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .login-header h1 { font-size: 2em; margin-bottom: 10px; }
+        .login-header p { opacity: 0.9; }
+        .login-form {
+            padding: 40px 30px;
+        }
+        .role-selector {
+            display: flex;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #e9ecef;
+        }
+        .role-option {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            background: #f8f9fa;
+            border: none;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        .role-option.active {
+            background: #2c5aa0;
+            color: white;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #2c5aa0;
+        }
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #2c5aa0 0%, #1e4080 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .alert {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            display: none;
+        }
+        .alert-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .demo-credentials {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+        .demo-credentials h4 {
+            margin-bottom: 10px;
+            color: #2c5aa0;
+        }
+        .cred-item {
+            margin: 8px 0;
+            font-family: monospace;
+        }
+        .access-levels {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .access-level {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <script src="/password-peek.js"></script>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>🍎 SparQd Email Admin</h1>
+            <p>Professional Email Management Platform</p>
+        </div>
+        
+        <div class="login-form">
+            <div class="role-selector">
+                <button class="role-option active" data-role="admin">👨‍💼 Admin</button>
+                <button class="role-option" data-role="manager">📊 Manager</button>
+                <button class="role-option" data-role="client">👤 Client</button>
+            </div>
+            
+            <div class="alert alert-error" id="error-alert"></div>
+            <div class="alert alert-success" id="success-alert"></div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username or Email</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <button type="submit" class="login-btn" id="login-btn">
+                    🔐 Sign In
+                </button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="#" id="forgot-password-link" style="color: #2c5aa0; text-decoration: none;">
+                    🔑 Forgot Password?
+                </a>
+            </div>
+            
+            <div class="access-levels">
+                <h4>🔑 Access Levels:</h4>
+                <div class="access-level">
+                    <span><strong>Admin:</strong></span>
+                    <span>Full system access</span>
+                </div>
+                <div class="access-level">
+                    <span><strong>Manager:</strong></span>
+                    <span>Email & domain management</span>
+                </div>
+                <div class="access-level">
+                    <span><strong>Client:</strong></span>
+                    <span>View-only access</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Role selector functionality
+        document.querySelectorAll('.role-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update form based on role
+                const role = this.dataset.role;
+                updateFormForRole(role);
+            });
+        });
+        
+        function updateFormForRole(role) {
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            
+            if (role === 'admin') {
+                usernameInput.placeholder = 'Enter admin username';
+                passwordInput.placeholder = 'Enter admin password';
+            } else if (role === 'manager') {
+                usernameInput.placeholder = 'Enter manager username';
+                passwordInput.placeholder = 'Enter manager password';
+            } else if (role === 'client') {
+                usernameInput.placeholder = 'Enter client username';
+                passwordInput.placeholder = 'Enter your password';
+            }
+        }
+        
+        // Login form submission
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('login-btn');
+            
+            // Show loading state
+            loginBtn.disabled = true;
+            loginBtn.textContent = '🔄 Signing In...';
+            
+            hideAlerts();
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showAlert('success', '✅ Login successful! Redirecting...');
+                    
+                    // Store token and user info
+                    localStorage.setItem('authToken', result.token);
+                    localStorage.setItem('currentUser', JSON.stringify(result.user));
+                    
+                    // Check if password change is required
+                    if (result.requirePasswordChange) {
+                        showAlert('success', '⚠️ Password change required. Redirecting...');
+                        setTimeout(() => {
+                            window.location.replace('/change-password');
+                        }, 1000);
+                    } else {
+                        // Redirect to dashboard
+                        setTimeout(() => {
+                            window.location.replace('/dashboard');
+                        }, 1000);
+                    }
+                    
+                } else {
+                    showAlert('error', result.error || 'Login failed');
+                }
+                
+            } catch (error) {
+                showAlert('error', 'Network error. Please try again.');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = '🔐 Sign In';
+            }
+        });
+        
+        function showAlert(type, message) {
+            const alert = document.getElementById(`${type}-alert`);
+            alert.textContent = message;
+            alert.style.display = 'block';
+        }
+        
+        function hideAlerts() {
+            document.querySelectorAll('.alert').forEach(alert => {
+                alert.style.display = 'none';
+            });
+        }
+        
+        // Check if already logged in (but not if just logged out)
+        if (localStorage.getItem('authToken') && localStorage.getItem('justLoggedOut') !== 'true') {
+            console.log('User already has auth token, redirecting to dashboard');
+            window.location.replace('/dashboard');
+        } else if (localStorage.getItem('justLoggedOut') === 'true') {
+            console.log('User just logged out, clearing logout flag');
+            localStorage.removeItem('justLoggedOut');
+        }
+        
+        // Initialize form
+        updateFormForRole('admin');
+        
+        // Forgot password functionality
+        document.getElementById('forgot-password-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            showPasswordResetForm();
+        });
+        
+        function showPasswordResetForm() {
+            const resetForm = `
+                <div style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                    <h4>🔑 Password Reset</h4>
+                    <div style="margin: 15px 0;">
+                        <label>Username:</label>
+                        <input type="text" id="reset-username" style="width: 100%; padding: 8px; margin: 5px 0;" placeholder="Enter your username">
+                    </div>
+                    <div style="margin: 15px 0;">
+                        <label>Email:</label>
+                        <input type="email" id="reset-email" style="width: 100%; padding: 8px; margin: 5px 0;" placeholder="Enter your registered email">
+                    </div>
+                    <button id="send-reset" style="background: #2c5aa0; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+                        Send Reset Token
+                    </button>
+                    <button id="cancel-reset" style="background: #6c757d; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">
+                        Cancel
+                    </button>
+                </div>
+            `;
+            
+            document.querySelector('.login-form').insertAdjacentHTML('beforeend', resetForm);
+            
+            document.getElementById('send-reset').addEventListener('click', async function() {
+                const username = document.getElementById('reset-username').value;
+                const email = document.getElementById('reset-email').value;
+                
+                if (!username || !email) {
+                    showAlert('error', 'Please enter both username and email');
+                    return;
+                }
+                
+                try {
+                    const response = await fetch('/api/auth/request-reset', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username, email })
+                    });
+                    
+                    const result = await response.json();
+                    showAlert('success', result.message);
+                    
+                    if (result.resetToken) {
+                        showPasswordResetTokenForm(result.resetToken);
+                    }
+                } catch (error) {
+                    showAlert('error', 'Reset request failed');
+                }
+            });
+            
+            document.getElementById('cancel-reset').addEventListener('click', function() {
+                document.querySelector('.login-form > div:last-child').remove();
+            });
+        }
+        
+        function showPasswordResetTokenForm(token) {
+            const tokenForm = `
+                <div style="margin-top: 20px; padding: 20px; background: #e8f4f8; border-radius: 8px;">
+                    <h4>🔐 Reset Password</h4>
+                    <p style="margin: 10px 0; font-size: 0.9em;">Reset token: <code>${token}</code></p>
+                    <div style="margin: 15px 0;">
+                        <label>New Password:</label>
+                        <input type="password" id="new-password" style="width: 100%; padding: 8px; margin: 5px 0;" placeholder="Enter new password (minimum 8 characters)">
+                    </div>
+                    <div style="margin: 15px 0;">
+                        <label>Confirm Password:</label>
+                        <input type="password" id="confirm-password" style="width: 100%; padding: 8px; margin: 5px 0;" placeholder="Confirm your new password">
+                    </div>
+                    <button id="complete-reset" style="background: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+                        Reset Password
+                    </button>
+                </div>
+            `;
+            
+            document.querySelector('.login-form').insertAdjacentHTML('beforeend', tokenForm);
+            
+            document.getElementById('complete-reset').addEventListener('click', async function() {
+                const newPassword = document.getElementById('new-password').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+                
+                if (newPassword !== confirmPassword) {
+                    showAlert('error', 'Passwords do not match');
+                    return;
+                }
+                
+                if (newPassword.length < 8) {
+                    showAlert('error', 'Password must be at least 8 characters long');
+                    return;
+                }
+                
+                try {
+                    const response = await fetch('/api/auth/reset-password', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ token, newPassword })
+                    });
+                    
+                    const result = await response.json();
+                    if (response.ok) {
+                        showAlert('success', 'Password reset successfully! You can now login.');
+                        // Remove reset forms
+                        document.querySelectorAll('.login-form > div:nth-last-child(-n+2)').forEach(el => el.remove());
+                    } else {
+                        showAlert('error', result.error);
+                    }
+                } catch (error) {
+                    showAlert('error', 'Password reset failed');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

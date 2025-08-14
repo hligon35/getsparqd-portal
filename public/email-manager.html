@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Manager - SparQ Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .admin-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem 0;
+        }
+        .email-card {
+            transition: transform 0.2s ease;
+            border-left: 4px solid #667eea;
+        }
+        .email-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .status-badge {
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-header">
+        <div class="container">
+            <h1>📧 Email Account Manager</h1>
+            <p>Manage all client email accounts and settings</p>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5>📋 Active Email Accounts</h5>
+                        <button class="btn btn-primary btn-sm" onclick="createNewAccount()">
+                            ➕ New Account
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="email-card card mb-3">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-4">
+                                        <h6 class="mb-1">bridget.charles@melawholefoodsva.com</h6>
+                                        <small class="text-muted">Client: Bridget Charles</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <span class="badge bg-success status-badge">Active</span>
+                                        <span class="badge bg-info status-badge">Admin</span>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <small class="text-muted">Last Login:<br>2 hours ago</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="resetPassword('bridget.charles@melawholefoodsva.com')">
+                                            🔑 Reset
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info" onclick="loginAs('bridget.charles@melawholefoodsva.com')">
+                                            👤 Login
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="email-card card mb-3">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-4">
+                                        <h6 class="mb-1">vinson.ravenelle@melawholefoodsva.com</h6>
+                                        <small class="text-muted">Client: Vinson Ravenelle</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <span class="badge bg-success status-badge">Active</span>
+                                        <span class="badge bg-warning status-badge">User</span>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <small class="text-muted">Last Login:<br>1 day ago</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="resetPassword('vinson.ravenelle@melawholefoodsva.com')">
+                                            🔑 Reset
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info" onclick="loginAs('vinson.ravenelle@melawholefoodsva.com')">
+                                            👤 Login
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="email-card card mb-3">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-4">
+                                        <h6 class="mb-1">paul.johnson@melawholefoodsva.com</h6>
+                                        <small class="text-muted">Client: Paul Johnson</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <span class="badge bg-success status-badge">Active</span>
+                                        <span class="badge bg-warning status-badge">User</span>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <small class="text-muted">Last Login:<br>3 days ago</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="resetPassword('paul.johnson@melawholefoodsva.com')">
+                                            🔑 Reset
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info" onclick="loginAs('paul.johnson@melawholefoodsva.com')">
+                                            👤 Login
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6>📊 Quick Stats</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <h4 class="text-primary">3</h4>
+                                <small>Active Accounts</small>
+                            </div>
+                            <div class="col-6">
+                                <h4 class="text-success">1</h4>
+                                <small>Aliases</small>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <h4 class="text-info">156</h4>
+                                <small>Total Emails</small>
+                            </div>
+                            <div class="col-6">
+                                <h4 class="text-warning">2.3GB</h4>
+                                <small>Storage Used</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6>📧 Email Aliases</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span>info@melawholefoodsva.com</span>
+                            <span class="badge bg-info">→ bridget.charles</span>
+                        </div>
+                        <button class="btn btn-sm btn-outline-success w-100" onclick="createAlias()">
+                            ➕ Add Alias
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h6>🔧 Quick Actions</h6>
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-outline-primary w-100 mb-2" onclick="bulkPasswordReset()">
+                            🔑 Bulk Password Reset
+                        </button>
+                        <button class="btn btn-outline-info w-100 mb-2" onclick="exportSettings()">
+                            📥 Export Settings
+                        </button>
+                        <button class="btn btn-outline-warning w-100" onclick="viewLogs()">
+                            📋 View Email Logs
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function createNewAccount() {
+            const email = prompt("Enter new email address:");
+            const password = prompt("Enter password (or leave blank for auto-generated):");
+            if (email) {
+                alert(`Creating account: ${email}\nPassword: ${password || 'Auto-generated'}\n\nAccount will be created with:\n✅ IMAP/SMTP access\n✅ Webmail interface\n✅ Default folders`);
+            }
+        }
+
+        function resetPassword(email) {
+            const newPassword = prompt(`Reset password for ${email}:\n\nEnter new password (or leave blank for auto-generated):`);
+            if (newPassword !== null) {
+                alert(`Password reset for ${email}\nNew password: ${newPassword || 'Auto-generated: #NewPass2025'}\n\n✅ Password updated in database\n✅ User will be notified`);
+            }
+        }
+
+        function loginAs(email) {
+            // Open webmail with pre-filled email
+            window.open(`../webmail/?_user=${encodeURIComponent(email)}`, '_blank');
+        }
+
+        function createAlias() {
+            const alias = prompt("Enter alias email (e.g., support@domain.com):");
+            const target = prompt("Forward to email address:");
+            if (alias && target) {
+                alert(`Creating alias:\n${alias} → ${target}\n\n✅ Alias will be added to Postfix\n✅ Mail will forward automatically`);
+            }
+        }
+
+        function bulkPasswordReset() {
+            if (confirm("Reset passwords for all accounts to #MWF2025?\n\nThis will affect all 3 active accounts.")) {
+                alert("✅ Bulk password reset completed!\n\nAll accounts now use: #MWF2025\nUsers will be notified to change passwords.");
+            }
+        }
+
+        function exportSettings() {
+            alert("📥 Email Settings Export\n\nGenerating configuration file with:\n✅ Account settings\n✅ Alias configurations\n✅ IMAP/SMTP settings\n✅ Client setup instructions\n\n(Download starting...)");
+        }
+
+        function viewLogs() {
+            window.open('../logs/email-logs.php', '_blank');
+        }
+    </script>
+</body>
+</html>

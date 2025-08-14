@@ -1,0 +1,18 @@
+Subject: 🎉 Your Business Email Accounts Are Ready!
+
+Dear [CLIENT_NAME],
+
+Your Business Email account(s) have been successfully configured!
+
+📧 Email Accounts Created:
+[EMAIL_ACCOUNTS_LIST]
+
+🌐 Webmail Access: http://mail.[DOMAIN]
+📱 Email Settings: [DOMAIN] (IMAP:993, SMTP:587)
+💾 Storage Allocated: [STORAGE]GB
+💰 Monthly Savings: No more email hosting fees!
+
+Login credentials are attached.
+
+Best regards,
+SparQd Digital Team

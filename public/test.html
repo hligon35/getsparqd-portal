@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Test</title>
+</head>
+<body>
+    <h1>Dashboard Test</h1>
+    <div id="test-output"></div>
+    
+    <script>
+        // Test authentication
+        fetch('/api/auth/me', {
+            method: 'GET',
+            credentials: 'include'
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Not authenticated');
+        })
+        .then(user => {
+            document.getElementById('test-output').innerHTML = `
+                <p>✅ Authentication working</p>
+                <p>User: ${user.name} (${user.role})</p>
+                <p>Password change required: ${user.requirePasswordChange}</p>
+            `;
+            
+            // Test dashboard stats
+            return fetch('/api/dashboard/stats', { credentials: 'include' });
+        })
+        .then(response => response.json())
+        .then(stats => {
+            document.getElementById('test-output').innerHTML += `
+                <p>✅ Dashboard stats working</p>
+                <p>Stats: ${JSON.stringify(stats)}</p>
+            `;
+        })
+        .catch(error => {
+            document.getElementById('test-output').innerHTML = `
+                <p>❌ Error: ${error.message}</p>
+                <p>Try logging in first at <a href="/">Login Page</a></p>
+            `;
+        });
+    </script>
+</body>
+</html>

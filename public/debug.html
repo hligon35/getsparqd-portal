@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Debug</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .debug { background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .log { background: #e8f4f8; padding: 5px; margin: 2px 0; border-left: 3px solid #2c5aa0; }
+        .error { background: #ffe6e6; border-left-color: #dc3545; }
+    </style>
+</head>
+<body>
+    <h1>Dashboard Debug Tool</h1>
+    <div id="debug-output"></div>
+    
+    <script>
+        const debugOutput = document.getElementById('debug-output');
+        let logCount = 0;
+        
+        function log(message, type = 'info') {
+            logCount++;
+            const logDiv = document.createElement('div');
+            logDiv.className = `log ${type}`;
+            logDiv.innerHTML = `<strong>[${logCount}] ${new Date().toLocaleTimeString()}</strong> - ${message}`;
+            debugOutput.appendChild(logDiv);
+            debugOutput.scrollTop = debugOutput.scrollHeight;
+            
+            // Prevent excessive logs
+            if (logCount > 50) {
+                const firstLog = debugOutput.querySelector('.log');
+                if (firstLog) firstLog.remove();
+            }
+        }
+        
+        log('🚀 Debug tool started');
+        
+        // Check current page state
+        log(`📍 Current URL: ${window.location.href}`);
+        log(`📍 Pathname: ${window.location.pathname}`);
+        log(`📍 Search: ${window.location.search}`);
+        
+        // Check local storage
+        const authToken = localStorage.getItem('authToken');
+        const currentUser = localStorage.getItem('currentUser');
+        const authCheck = localStorage.getItem('authCheck');
+        
+        log(`💾 Auth Token: ${authToken ? 'Present' : 'Missing'}`);
+        log(`💾 Current User: ${currentUser ? 'Present' : 'Missing'}`);
+        log(`💾 Last Auth Check: ${authCheck ? new Date(parseInt(authCheck)).toLocaleTimeString() : 'Never'}`);
+        
+        if (currentUser) {
+            try {
+                const user = JSON.parse(currentUser);
+                log(`👤 User: ${user.username} (${user.role})`);
+                log(`🔑 Password change required: ${user.requirePasswordChange}`);
+            } catch (e) {
+                log('❌ Invalid user data in localStorage', 'error');
+            }
+        }
+        
+        // Test authentication endpoint
+        log('🔍 Testing authentication...');
+        fetch('/api/auth/me', {
+            method: 'GET',
+            credentials: 'include'
+        })
+        .then(response => {
+            log(`🌐 Auth endpoint status: ${response.status}`);
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error(`HTTP ${response.status}`);
+            }
+        })
+        .then(user => {
+            log(`✅ Server auth successful: ${user.username}`);
+            log(`🔑 Server says password change required: ${user.requirePasswordChange}`);
+        })
+        .catch(error => {
+            log(`❌ Server auth failed: ${error.message}`, 'error');
+        });
+        
+        // Monitor for redirects
+        let redirectCount = 0;
+        const originalHref = window.location.href;
+        
+        setInterval(() => {
+            if (window.location.href !== originalHref) {
+                redirectCount++;
+                log(`🔄 Redirect detected (#${redirectCount}): ${window.location.href}`, 'error');
+                
+                if (redirectCount > 3) {
+                    log('🚨 REDIRECT LOOP DETECTED! Stopping monitoring.', 'error');
+                    clearInterval(this);
+                }
+            }
+        }, 1000);
+        
+        // Test dashboard endpoints
+        setTimeout(() => {
+            log('📊 Testing dashboard stats...');
+            fetch('/api/dashboard/stats', { credentials: 'include' })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error(`HTTP ${response.status}`);
+            })
+            .then(stats => {
+                log(`✅ Dashboard stats: ${JSON.stringify(stats)}`);
+            })
+            .catch(error => {
+                log(`❌ Dashboard stats failed: ${error.message}`, 'error');
+            });
+        }, 2000);
+    </script>
+</body>
+</html>

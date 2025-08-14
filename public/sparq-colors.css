@@ -1,0 +1,66 @@
+/* SparQ Digital Color Palette */
+:root {
+    --sparq-red: #da0c43;
+    --sparq-orange: #f4a728;
+    --sparq-blue-1: #1a7ad9;
+    --sparq-blue-2: #1e84db;
+    --sparq-blue-3: #0658a5;
+    --sparq-blue-4: #04488c;
+    --sparq-brown: #c47c2c;
+    --sparq-pink: #e41854;
+    --sparq-blue-5: #2c7ad8;
+    --sparq-blue-6: #044494;
+}
+
+/* Updated button styles */
+.btn-primary {
+    background: linear-gradient(135deg, var(--sparq-red) 0%, var(--sparq-blue-1) 100%) !important;
+    border: none !important;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--sparq-pink) 0%, var(--sparq-blue-5) 100%) !important;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, var(--sparq-orange) 0%, var(--sparq-brown) 100%) !important;
+    border: none !important;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--sparq-red) 0%, var(--sparq-pink) 100%) !important;
+}
+
+/* Card headers */
+.stats-card h3, .section h2 {
+    color: var(--sparq-red) !important;
+}
+
+/* Form inputs focus */
+input:focus, select:focus, textarea:focus {
+    border-color: var(--sparq-orange) !important;
+    box-shadow: 0 0 0 3px rgba(244, 167, 40, 0.1) !important;
+}
+
+/* Links */
+a {
+    color: var(--sparq-blue-1) !important;
+}
+
+a:hover {
+    color: var(--sparq-red) !important;
+}
+
+/* Status indicators */
+.status-active {
+    color: var(--sparq-blue-1) !important;
+}
+
+.status-warning {
+    color: var(--sparq-orange) !important;
+}
+
+.status-error {
+    color: var(--sparq-red) !important;
+}
