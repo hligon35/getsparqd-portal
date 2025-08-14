@@ -1,0 +1,9 @@
+name: Deploy portal
+on: { push: { branches: [ main ] } }
+jobs:
+  call:
+    uses: hligon35/server-deployer/.github/workflows/deploy.yml@main
+    with:
+      path: /srv/core/portal/email-admin
+      compose_file: /srv/core/portal/docker-compose.yml
+      compose_services: portal
