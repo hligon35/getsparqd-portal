@@ -4,41 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SparQ Digital Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <script src="base-path.js"></script>
     <script src="password-peek.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-orange: #f59c28;
+            --secondary-orange: #f7b626;
+            --primary-blue: #1a78d8;
+            --secondary-blue: #1a78d8;
+            --white: #ffffff;
+            --black: #000000;
+            --off-white: #f8f9fa;
+            --light-gray: #e9ecef;
+            --dark-gray: #343a40;
+            --gradient-primary: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+        }
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: linear-gradient(135deg, #da0c43 0%, #e41854 50%, #1a7ad9 100%);
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            color: var(--dark-gray);
+            background: var(--off-white);
             min-height: 100vh;
-            padding: 20px;
+            padding: 0;
+            margin: 0;
         }
         .container { 
-            max-width: 1400px; 
-            margin: 0 auto; 
+            width: 100vw; 
+            min-height: 100vh; 
+            margin: 0; 
             background: white; 
-            border-radius: 15px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
+            border-radius: 0; 
+            box-shadow: none;
+            display: flex;
+            flex-direction: column;
         }
         .header { 
-            background: linear-gradient(135deg, #da0c43 0%, #0658a5 100%); 
+            background: var(--gradient-secondary);
             color: white; 
-            padding: 30px; 
+            padding: 18px 24px; 
             text-align: center; 
         }
         .header h1 { font-size: 2.5em; margin-bottom: 10px; }
         .header p { font-size: 1.2em; opacity: 0.9; }
-        .main-content { display: flex; }
-        .sidebar { 
-            width: 300px; 
-            background: #f8f9fa; 
-            padding: 30px; 
-            border-right: 1px solid #dee2e6;
+        /* Top navigation placed under the header and above main content
+           - wraps into multiple rows on narrow viewports via flex-wrap
+           - horizontal scrolling allowed when content overflows
+        */
+        .top-nav {
+            display: flex;
+            gap: 8px;
+            padding: 10px 18px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--light-gray);
+            align-items: center;
+            flex-wrap: wrap; /* wrap into rows when viewport is narrow */
+            overflow-x: auto;
         }
-        .content { flex: 1; padding: 30px; }
-        .nav-item { 
+        /* Override .nav-item sizing when inside .top-nav so items are inline */
+        .top-nav .nav-item {
+            display: inline-flex;
+            align-items: center;
+            width: auto;
+            padding: 10px 14px;
+            margin: 6px 4px;
+            font-size: 0.98em;
+            white-space: nowrap;
+        }
+    .main-content { display: flex; flex: 1; min-height: 0; }
+    .content { flex: 1; padding: 24px; overflow: auto; min-width: 0; width: 100%; }
+    /* Make the content area have comfortable padding on small screens */
+    @media (max-width: 900px) {
+        .content { padding-left: 18px; padding-right: 18px; }
+    }
+    .nav-item { 
             display: block; 
             padding: 15px 20px; 
             margin: 10px 0; 
@@ -51,9 +91,9 @@
             font-size: 1.1em;
             transition: all 0.3s;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+    }
         .nav-item:hover, .nav-item.active { 
-            background: #2c5aa0; 
+            background: var(--primary-blue); 
             color: white; 
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -66,29 +106,28 @@
             padding: 25px; 
             margin: 20px 0; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border-left: 4px solid #2c5aa0;
+            border-left: 4px solid var(--primary-blue);
         }
         .form-group { margin: 20px 0; }
         .form-group label { 
             display: block; 
             margin-bottom: 8px; 
-            font-weight: 600; 
             color: #333;
         }
         .form-group input, .form-group select, .form-group textarea { 
             width: 100%; 
             padding: 12px 15px; 
-            border: 2px solid #e9ecef; 
+            border: 2px solid var(--light-gray); 
             border-radius: 8px; 
             font-size: 1em;
             transition: border-color 0.3s;
         }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { 
             outline: none; 
-            border-color: #2c5aa0; 
+            border-color: var(--primary-blue); 
         }
         .btn { 
-            background: linear-gradient(135deg, #da0c43 0%, #0658a5 100%); 
+            background: var(--gradient-primary); 
             color: white; 
             border: none; 
             padding: 15px 30px; 
@@ -103,11 +142,11 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
-        .btn-primary { background: linear-gradient(135deg, #da0c43 0%, #0658a5 100%); }
+        .btn-primary { background: var(--gradient-primary); }
         .btn-secondary { background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%); }
         .btn-success { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); }
         .btn-danger { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); }
-        .btn-info { background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); }
+        .btn-info { background: var(--gradient-secondary); }
         .status-indicator { 
             display: inline-block; 
             width: 12px; 
@@ -124,7 +163,7 @@
             margin: 20px 0;
         }
         .stat-card { 
-            background: linear-gradient(135deg, #da0c43 0%, #e41854 50%, #1a7ad9 100%); 
+            background: var(--gradient-secondary); 
             color: white; 
             padding: 25px; 
             border-radius: 10px; 
@@ -180,24 +219,30 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🍎 SparQ Digital Dashboard</h1>
-            <p>Professional Email Management & Automation Platform</p>
+            <div class="header">
+            <h1>SparQ Digital Dashboard</h1>
+            <p>Account Management</p>
         </div>
-        
+
+        <!-- Top navigation moved here (below header). Buttons wrap into rows on smaller viewports -->
+        <div class="top-nav" role="tablist" aria-label="Main navigation">
+            <button class="nav-item active" onclick="showSection('dashboard')">📊 Dashboard</button>
+            <button class="nav-item" onclick="showSection('create-domain')">🌐 Create Domain Email</button>
+            <button class="nav-item" onclick="showSection('webpage-setup')">🧱 Webpage Setup</button>
+            <button class="nav-item" onclick="showSection('manage-emails')">📧 Manage Emails</button>
+            <button class="nav-item" onclick="showSection('storage')">💾 Storage Management</button>
+            <button class="nav-item" onclick="showSection('dns-manager')">🌍 DNS Manager</button>
+            <button class="nav-item" onclick="showSection('client-portal')">👥 Client Portal</button>
+            <button class="nav-item" onclick="showSection('system-logs')">📋 System Logs</button>
+            <button class="nav-item" onclick="showSection('settings')">⚙️ Settings</button>
+            <button class="nav-item" onclick="showSparqPlug()">⚡ SparQ Plug</button>
+        </div>
+
         <div class="main-content">
-            <div class="sidebar">
-                <button class="nav-item active" onclick="showSection('dashboard')">📊 Dashboard</button>
-                <button class="nav-item" onclick="showSection('create-domain')">🌐 Create Domain Email</button>
-                <button class="nav-item" onclick="showSection('manage-emails')">📧 Manage Emails</button>
-                <button class="nav-item" onclick="showSection('storage')">💾 Storage Management</button>
-                <button class="nav-item" onclick="showSection('dns-manager')">🌍 DNS Manager</button>
-                <button class="nav-item" onclick="showSection('client-portal')">👥 Client Portal</button>
-                <button class="nav-item" onclick="showSection('system-logs')">📋 System Logs</button>
-                <button class="nav-item" onclick="showSection('settings')">⚙️ Settings</button>
-                <button class="nav-item" onclick="openSparqPlugApp()">⚡ SparQ Plug</button>
+            <div class="sidebar" aria-hidden="true">
+                <!-- Sidebar reserved for secondary controls. Primary navigation moved to top. -->
             </div>
-            
+
             <div class="content">
                 <!-- Dashboard Section -->
                 <div id="dashboard" class="section active">
@@ -224,10 +269,10 @@
                     
                     <div class="card">
                         <h3>🔧 System Status</h3>
-                        <p><span class="status-indicator status-online"></span>Postfix SMTP Server</p>
-                        <p><span class="status-indicator status-online"></span>Dovecot IMAP Server</p>
-                        <p><span class="status-indicator status-online"></span>Nginx Web Server</p>
-                        <p><span class="status-indicator status-online"></span>DNS Resolution</p>
+                        <p><span id="status-postfix" class="status-indicator status-offline"></span>Postfix SMTP Server</p>
+                        <p><span id="status-dovecot" class="status-indicator status-offline"></span>Dovecot IMAP Server</p>
+                        <p><span id="status-nginx" class="status-indicator status-offline"></span>Nginx Web Server</p>
+                        <p><span id="status-dns" class="status-indicator status-offline"></span>DNS Resolution</p>
                     </div>
                 </div>
                 
@@ -383,18 +428,62 @@
                     
                     <div class="card">
                         <h3>📊 Storage Overview</h3>
-                        <p><strong>Total NVMe Storage:</strong> 1TB</p>
-                        <p><strong>Available for Email:</strong> <span id="available-storage">975GB</span></p>
-                        <p><strong>Currently Allocated:</strong> <span id="allocated-storage">25GB</span></p>
+                        <p><strong>Total NVMe Storage:</strong> <span id="total-storage">—</span></p>
+                        <p><strong>Available for Email:</strong> <span id="available-storage">—</span></p>
+                        <p><strong>Currently Allocated (Email):</strong> <span id="allocated-storage">—</span></p>
                         
                         <div class="progress-bar">
                             <div class="progress-fill" style="width: 2.5%"></div>
                         </div>
                         
+                        <h4>🗂️ Pools (planned 25% allocation)</h4>
+                        <div id="storage-pools" class="email-list"></div>
+
                         <h4>📁 Domain Storage Allocation</h4>
                         <div id="domain-storage-list">
                             <!-- Domain storage info will be loaded here -->
                         </div>
+                    </div>
+                </div>
+
+                <!-- Webpage Setup Section -->
+                <div id="webpage-setup" class="section">
+                    <h2>🧱 Webpage Setup</h2>
+
+                    <div class="card">
+                        <h3>📁 Create Web Directory and Deploy</h3>
+                        <form id="webpage-setup-form">
+                            <div class="form-group">
+                                <label>Domain</label>
+                                <input type="text" id="webpage-domain" placeholder="example.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Site Title</label>
+                                <input type="text" id="webpage-title" placeholder="My Website" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Allocated Pool</label>
+                                <select id="webpage-pool">
+                                    <option value="">(loading pools...)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Initial Index.html Content (optional)</label>
+                                <textarea id="webpage-index" rows="6" placeholder="&lt;h1&gt;Hello world&lt;/h1&gt;"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Upload site files (optional, .zip / .tar.gz accepted)</label>
+                                <input type="file" id="webpage-files" accept=".zip,.tar,.gz,.tgz,text/html,application/zip">
+                                <small>Tip: upload a zip of your site (index.html at root) for full deployment.</small>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="webpage-enable-ssl"> Enable basic Let's Encrypt (if available)
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-success">🚀 Provision Webpage</button>
+                        </form>
+                        <div id="webpage-setup-result" style="margin-top:12px; display:none;"></div>
                     </div>
                 </div>
                 
@@ -534,6 +623,29 @@ SparQd Team
                     </div>
                 </div>
                 
+                <!-- SparQ Plug Section (embedded app) -->
+                <div id="sparq-plug" class="section">
+                    <h2>⚡ SparQ Plug</h2>
+                    <div class="card" id="sparqplug-embed-card">
+                        <div id="sparqplug-status" style="margin-bottom:12px; color:#555; font-size:0.95em;">
+                            Loading your SparQ Plug app…
+                        </div>
+                        <div id="sparqplug-frame-wrap" style="position:relative; width:100%; height:70vh; background:#f8f9fa; border:1px solid #e9ecef; border-radius:10px; overflow:hidden;">
+                            <div id="sparqplug-spinner" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; gap:10px; color:#666;">
+                                <div style="width:14px; height:14px; border:3px solid #cfd4da; border-top-color:#1a78d8; border-radius:50%; animation: spin 1s linear infinite"></div>
+                                <span>Starting…</span>
+                            </div>
+                            <iframe id="sparqplug-iframe" title="SparQ Plug" style="border:0; width:100%; height:100%; background:#fff;" referrerpolicy="no-referrer-when-downgrade" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" src="about:blank"></iframe>
+                        </div>
+                        <div id="sparqplug-fallback" style="margin-top:12px; display:none;">
+                            <button class="btn btn-info" id="sparqplug-open-newtab">Open in new tab</button>
+                        </div>
+                    </div>
+                    <style>
+                        @keyframes spin { from { transform: rotate(0deg);} to { transform: rotate(360deg);} }
+                    </style>
+                </div>
+
                 <!-- System Logs Section -->
                 <div id="system-logs" class="section">
                     <h2>📋 System Logs</h2>
@@ -576,19 +688,769 @@ SparQd Team
         </div>
     </div>
     
-    <script src="admin-dashboard.js"></script>
+                <script src="admin-dashboard.js"></script>
+                <script>
+                    // Dashboard live data loader
+                    (function(){
+                        const $ = (id) => document.getElementById(id);
+                        function setText(id, text){ const el = $(id); if (el) el.textContent = text; }
+                        function setStatus(id, ok){ const el = $(id); if (!el) return; el.classList.remove('status-online','status-offline'); el.classList.add(ok ? 'status-online' : 'status-offline'); }
+
+                        // Try multiple candidate endpoints for stats/health to support base path variations
+                        async function fetchJSONCandidates(paths){
+                            const cands = [];
+                            paths.forEach(p=>{
+                                const clean = p.startsWith('/') ? p : '/' + p;
+                                cands.push(clean);
+                                if (!clean.startsWith('/portal/')) cands.push('/portal' + clean);
+                                try { if (typeof window.__withBase__==='function') cands.push(window.__withBase__(clean.replace(/^\//,''))); } catch(_){ }
+                            });
+                            let lastErr;
+                            for (const url of cands){
+                                try {
+                                    const r = await fetch(url, { credentials: 'include' });
+                                    if (r.ok) return r.json();
+                                    lastErr = new Error('HTTP ' + r.status);
+                                } catch(e){ lastErr = e; }
+                            }
+                            throw lastErr || new Error('All candidates failed');
+                        }
+
+                        async function loadStats(){
+                            try {
+                                // Expecting shape: { domains, emails, storageUsedGB, monthlySavings }
+                                const stats = await fetchJSONCandidates(['/api/stats','/api/portal/stats','/api/metrics/summary']);
+                                if (stats){
+                                    if (Number.isFinite(stats.domains)) setText('total-domains', String(stats.domains));
+                                    if (Number.isFinite(stats.emails)) setText('total-emails', String(stats.emails));
+                                    if (Number.isFinite(stats.storageUsedGB)) setText('storage-used', stats.storageUsedGB + 'GB');
+                                    if (stats.monthlySavings != null) setText('monthly-savings', (stats.monthlySavings.toLocaleString ? '$' + stats.monthlySavings.toLocaleString() : '$' + stats.monthlySavings));
+                                }
+                            } catch(_){ /* leave defaults */ }
+                        }
+
+                        async function loadHealth(){
+                            try {
+                                // Try portal health first, then gateway, then assistant health as proxy
+                                const h = await fetchJSONCandidates(['/healthz','/api/health','/gateway/health','/api/sparqy/health']);
+                                // Expected booleans by key if available, else infer OK if call succeeded
+                                const ok = (k) => (h && typeof h[k] === 'boolean') ? h[k] : true;
+                                setStatus('status-postfix', ok('postfix'));
+                                setStatus('status-dovecot', ok('dovecot'));
+                                setStatus('status-nginx', ok('nginx'));
+                                // dns may be nested like {dns:{ok:true}}
+                                const dnsOk = (h && h.dns && typeof h.dns.ok==='boolean') ? h.dns.ok : ok('dns');
+                                setStatus('status-dns', dnsOk === undefined ? true : !!dnsOk);
+                            } catch(_){
+                                setStatus('status-postfix', false);
+                                setStatus('status-dovecot', false);
+                                setStatus('status-nginx', false);
+                                setStatus('status-dns', false);
+                            }
+                        }
+
+                        async function loadLogs(){
+                            try {
+                                const data = await fetchJSONCandidates(['/api/logs/recent','/api/system/logs','/logs/recent']);
+                                const container = document.getElementById('system-log-entries');
+                                if (!container) return;
+                                container.innerHTML = '';
+                                const items = Array.isArray(data) ? data : (Array.isArray(data?.logs) ? data.logs : []);
+                                items.slice(0,50).forEach(line => {
+                                    const div = document.createElement('div');
+                                    div.className = 'log-entry';
+                                    div.textContent = typeof line === 'string' ? line : JSON.stringify(line);
+                                    container.appendChild(div);
+                                });
+                            } catch(_){ /* ignore */ }
+                        }
+
+                        function schedule(){
+                            loadStats();
+                            loadHealth();
+                            loadLogs();
+                            // Auto-refresh every 30s while dashboard visible
+                            setInterval(()=>{
+                                const dash = document.getElementById('dashboard');
+                                if (dash && dash.classList.contains('active')){
+                                    loadStats();
+                                    loadHealth();
+                                }
+                            }, 30000);
+                        }
+
+                        // Hook refresh buttons if present
+                        window.refreshLogs = loadLogs;
+                        // Kick on DOM ready
+                        if (document.readyState === 'loading') {
+                            document.addEventListener('DOMContentLoaded', schedule);
+                        } else {
+                            schedule();
+                        }
+                    })();
+                </script>
+                <script>
+                    // Webpage setup: populate pools and submit form
+                    (function(){
+                        const $ = id => document.getElementById(id);
+
+                        async function fetchJSONCandidates(paths){
+                            const cands = [];
+                            paths.forEach(p=>{
+                                const clean = p.startsWith('/') ? p : '/' + p;
+                                cands.push(clean);
+                                if (!clean.startsWith('/portal/')) cands.push('/portal' + clean);
+                                try { if (typeof window.__withBase__==='function') cands.push(window.__withBase__(clean.replace(/^\//,''))); } catch(_){ }
+                            });
+                            let lastErr;
+                            for (const url of cands){
+                                try {
+                                    const r = await fetch(url, { credentials: 'include', headers: { 'Accept': 'application/json' } });
+                                    if (r.ok) return r.json();
+                                    lastErr = new Error('HTTP ' + r.status);
+                                } catch(e){ lastErr = e; }
+                            }
+                            throw lastErr || new Error('All candidates failed');
+                        }
+
+                        async function loadPools(){
+                            const sel = $('webpage-pool');
+                            sel.innerHTML = '<option value="">(loading pools...)</option>';
+                            try {
+                                const data = await fetchJSONCandidates(['/api/storage/summary','/api/portal/storage/summary']);
+                                const pools = data && data.pools ? data.pools : (data.plannedAllocation ? data.plannedAllocation : null);
+                                sel.innerHTML = '';
+                                if (pools && Array.isArray(pools)){
+                                    pools.forEach(p => {
+                                        const opt = document.createElement('option');
+                                        opt.value = p.name || p.key || JSON.stringify(p);
+                                        opt.textContent = `${p.name || p.key} — ${p.sizeGB || p.size || (p.bytes ? (p.bytes/1e9).toFixed(2) + 'GB' : '')}`;
+                                        sel.appendChild(opt);
+                                    });
+                                } else {
+                                    const opt = document.createElement('option'); opt.value='default'; opt.textContent='default'; sel.appendChild(opt);
+                                }
+                            } catch(e){
+                                sel.innerHTML = '<option value="default">default</option>';
+                            }
+                        }
+
+                        // Sends either JSON or multipart/form-data depending on presence of a file
+                        async function postCandidates(path, body, file){
+                            const clean = path.startsWith('/') ? path : '/' + path;
+                            const noSlash = clean.replace(/^\//,'');
+                            const cands = [clean];
+                            if (!clean.startsWith('/portal/')) cands.push('/portal/' + noSlash);
+                            try { if (typeof window.__withBase__ === 'function') cands.push(window.__withBase__(noSlash)); } catch(_){ }
+                            let lastErr = null;
+                            for (const url of cands){
+                                try {
+                                    let opts = { method: 'POST', credentials: 'include' };
+                                    if (file) {
+                                        const fd = new FormData();
+                                        fd.append('domain', body.domain || '');
+                                        fd.append('title', body.title || '');
+                                        fd.append('pool', body.pool || '');
+                                        fd.append('enableSsl', body.enableSsl ? '1' : '0');
+                                        fd.append('indexHtml', body.indexHtml || '');
+                                        fd.append('sitefile', file);
+                                        opts.body = fd;
+                                    } else {
+                                        opts.headers = { 'Content-Type': 'application/json' };
+                                        opts.body = JSON.stringify(body);
+                                    }
+                                    const r = await fetch(url, opts);
+                                    if (r.status === 401) return { status: 401 };
+                                    if (r.ok) return { status: 200, body: await r.json() };
+                                    // Try next candidate on non-HTML 404s
+                                    lastErr = new Error('HTTP ' + r.status);
+                                } catch(e){ lastErr = e; }
+                            }
+                            throw lastErr || new Error('All attempts failed');
+                        }
+
+                        async function submitForm(e){
+                            e.preventDefault();
+                            const domain = $('webpage-domain').value.trim();
+                            const title = $('webpage-title').value.trim();
+                            const pool = $('webpage-pool').value;
+                            const index = $('webpage-index').value;
+                            const enableSsl = $('webpage-enable-ssl').checked;
+                            const resultEl = $('webpage-setup-result');
+                            resultEl.style.display = 'block';
+                            resultEl.textContent = 'Provisioning...';
+                            try {
+                                const payload = { domain, title, pool, indexHtml: index, enableSsl };
+                                const fileInput = document.getElementById('webpage-files');
+                                const file = (fileInput && fileInput.files && fileInput.files[0]) ? fileInput.files[0] : null;
+                                const res = await postCandidates('/api/setup/webpage', payload, file);
+                                if (res.status === 401){
+                                    // redirect to login
+                                    const rt = encodeURIComponent(window.location.href.replace(/#.*$/, ''));
+                                    window.location.href = `/login?sso=1&returnTo=${rt}`;
+                                    return;
+                                }
+                                if (res.status === 200){
+                                    resultEl.className = 'alert alert-success';
+                                    resultEl.textContent = 'Success: ' + (res.body && res.body.message ? res.body.message : 'Webpage provisioned.');
+                                } else {
+                                    resultEl.className = 'alert alert-error';
+                                    resultEl.textContent = 'Unexpected response';
+                                }
+                            } catch(err){
+                                resultEl.className = 'alert alert-error';
+                                resultEl.textContent = 'Error: ' + (err && err.message ? err.message : String(err));
+                            }
+                        }
+
+                        document.addEventListener('DOMContentLoaded', ()=>{
+                            const form = $('webpage-setup-form');
+                            if (form) form.addEventListener('submit', submitForm);
+                            loadPools();
+                        });
+                    })();
+                </script>
+                <script>
+                    // Lightweight loader for embedding SparQ Plug inside the portal
+                    let __sparqplugLoaded = false;
+                    let __sparqplugUrl = null;
+                    async function loadSparqPlugEmbed() {
+                        if (__sparqplugLoaded && __sparqplugUrl) return; // already set
+                        const statusEl = document.getElementById('sparqplug-status');
+                        const spinnerEl = document.getElementById('sparqplug-spinner');
+                        const iframe = document.getElementById('sparqplug-iframe');
+                        const fallback = document.getElementById('sparqplug-fallback');
+                        const openBtn = document.getElementById('sparqplug-open-newtab');
+
+                        // Helper: try both normal and /portal-prefixed paths (when served under /portal)
+                        async function fetchPortalJSON(path) {
+                            const clean = path.startsWith('/') ? path : '/' + path;
+                            const candidates = [clean, '/portal' + clean];
+                            let lastErr;
+                            for (const url of candidates) {
+                                try {
+                                    const r = await fetch(url, { credentials: 'include' });
+                                    if (r.ok) return r.json();
+                                    if (r.status === 401) {
+                                        // Kick to login and come back
+                                        const rt = encodeURIComponent(window.location.href.replace(/#.*$/, ''));
+                                        window.location.href = `/login?sso=1&returnTo=${rt}`;
+                                        return Promise.reject(new Error('Redirecting to login'));
+                                    }
+                                    lastErr = new Error(`HTTP ${r.status}`);
+                                } catch (e) { lastErr = e; }
+                            }
+                            throw lastErr || new Error('Request failed');
+                        }
+
+                        try {
+                            statusEl.textContent = 'Fetching your role-based app URL…';
+                            const data = await fetchPortalJSON('/api/sparqplug/url');
+                            if (!data || !data.url) throw new Error('No URL received');
+                            __sparqplugUrl = data.url;
+                            openBtn.onclick = () => window.open(__sparqplugUrl, '_blank', 'noopener');
+                            fallback.style.display = 'block';
+                            statusEl.textContent = 'Loading app…';
+
+                            // Load iframe
+                            let loaded = false;
+                            iframe.addEventListener('load', () => {
+                                loaded = true;
+                                spinnerEl.style.display = 'none';
+                                statusEl.textContent = 'SparQ Plug';
+                            }, { once: true });
+                            // If not loaded after timeout, keep fallback visible
+                            setTimeout(() => {
+                                if (!loaded) {
+                                    statusEl.textContent = 'If the app did not load, use the button below to open it in a new tab.';
+                                    spinnerEl.style.display = 'none';
+                                }
+                            }, 4000);
+                            iframe.src = __sparqplugUrl;
+                            __sparqplugLoaded = true;
+                        } catch (e) {
+                            spinnerEl.style.display = 'none';
+                            statusEl.textContent = 'Could not load SparQ Plug here. Open in a new tab:';
+                            fallback.style.display = 'block';
+                        }
+                    }
+
+                    // Open SparQ Plug in the current window (recommended)
+                    async function showSparqPlug() {
+                        // If we already fetched the URL, go directly
+                        if (__sparqplugUrl) { window.location.assign(__sparqplugUrl); return; }
+                        // Fetch role URL from the portal API (handles /portal prefix when applicable)
+                        async function fetchPortalJSON(path) {
+                            const clean = path.startsWith('/') ? path : '/' + path;
+                            const candidates = [clean, '/portal' + clean];
+                            for (const url of candidates) {
+                                try {
+                                    const r = await fetch(url, { credentials: 'include' });
+                                    if (r.ok) return r.json();
+                                    if (r.status === 401) {
+                                        const rt = encodeURIComponent(window.location.href.replace(/#.*$/, ''));
+                                        window.location.href = `/login?sso=1&returnTo=${rt}`;
+                                        return Promise.reject(new Error('Redirecting to login'));
+                                    }
+                                } catch (_) { /* try next */ }
+                            }
+                            throw new Error('Could not get app URL');
+                        }
+                        try {
+                            const data = await fetchPortalJSON('/api/sparqplug/url');
+                            if (data && data.url) {
+                                __sparqplugUrl = data.url;
+                                window.location.assign(__sparqplugUrl);
+                                return;
+                            }
+                        } catch (_) {
+                            // Fall back to embedded view if fetch fails
+                            showSection('sparq-plug');
+                            loadSparqPlugEmbed();
+                        }
+                    }
+                </script>
+    
+    <!-- SparQ Plug launcher (fixed, same placement as login page) -->
+    <div id="sparq-plug-launcher" style="position: fixed; right: 40px; bottom: 20px; z-index: 9999;">
+        <button id="open-sparq-plug" style="background: var(--gradient-primary); color: white; border: none; padding: 12px 16px; border-radius: 999px; box-shadow: 0 8px 20px rgba(0,0,0,.15); font-weight: 700; cursor: pointer;">
+            Need Help?
+        </button>
+        <!-- Optional link to full app; keep hidden for now to avoid navigation until behavior is defined -->
+        <a href="#" style="display:none; text-align:center; margin-top:8px; color:#1a7ad9; font-weight:600; text-decoration:none;">Open Full App</a>
+    </div>
+    <div id="sparq-plug-panel" style="position: fixed; right: 20px; bottom: 80px; width: 420px; height: 70vh; background: #fff; border-radius: 14px; box-shadow: 0 20px 40px rgba(0,0,0,.2); overflow: hidden; display: none; z-index: 9999;">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 12px; background: var(--gradient-secondary); color:#fff;">
+            <span style="font-style: italic;">
+                <span style="font-size:14px; font-weight:600;">SparQy</span>
+                <span style="font-size:10px; font-weight:400; opacity:0.9;"> (Virtual Assistant)</span>
+            </span>
+            <button id="close-sparq-plug" style="background:transparent; border:none; color:#fff; font-size:20px; line-height:20px; cursor:pointer;">×</button>
+        </div>
+        <div id="sparqy-chat" style="display:flex; flex-direction:column; height: calc(100% - 42px);">
+            <div id="sparqy-messages" style="flex:1; overflow:auto; padding:12px; background:#f8f9fa;"></div>
+            <form id="sparqy-form" style="display:flex; gap:8px; padding:10px; border-top:1px solid #eee; background:#fff; align-items:center;">
+                <input id="sparqy-input" type="text" placeholder="Ask SparQy… (press Enter to send)" style="flex:1; padding:10px 12px; border:1px solid #ddd; border-radius:8px;">
+                <button id="sparqy-clear" type="button" class="btn btn-secondary" title="Clear conversation" style="padding:10px 12px; border-radius:8px;">Clear</button>
+                <button id="sparqy-send" class="btn btn-primary" type="submit" style="padding:10px 16px; border-radius:8px;">Send</button>
+            </form>
+        </div>
+    </div>
     <script>
-function openSparqPlugApp(){ window.location.href = /dashboard; }
-            } catch (e) { /* ignore parse errors */ }
-            // Map roles to SparQ Plug paths
-            const rolePathMap = { admin: 'admin', manager: 'manager', client: 'client', user: 'user' };
-            const segment = rolePathMap[role] || 'user';
-            window.location.href = `/sparq-plug/${segment}`;
-        }
+        (function(){
+            const openBtn = document.getElementById('open-sparq-plug');
+            const closeBtn = document.getElementById('close-sparq-plug');
+            const panel = document.getElementById('sparq-plug-panel');
+            const messagesEl = document.getElementById('sparqy-messages');
+            const form = document.getElementById('sparqy-form');
+            const input = document.getElementById('sparqy-input');
+            const clearBtn = document.getElementById('sparqy-clear');
+            let sending = false;
+            // Base-path aware fetch with multiple candidates to avoid 404s from wrong origin/prefix
+            async function fetchSparqy(path, opts){
+                const raw = path.startsWith('/') ? path : `/${path}`;
+                const clean = raw.replace(/^\/+/, '/');
+                const noSlash = clean.replace(/^\//, '');
+                const cands = new Set();
+                // 1) Raw relative
+                cands.add(clean);
+                // 2) With /portal prefix (when served under /portal)
+                if (!clean.startsWith('/portal/')) cands.add(`/portal/${noSlash}`);
+                // 3) Using __withBase__ helper if available
+                try {
+                    if (typeof window.__withBase__ === 'function') {
+                        const withBase = window.__withBase__(noSlash);
+                        if (withBase) cands.add(withBase);
+                    }
+                } catch(_){}
+
+                let lastErr = null;
+                for (const url of cands) {
+                    try {
+                        const r = await fetch(url, opts);
+                        if (r.ok) return r;
+                        // Accept 401 to allow caller to handle signin message
+                        if (r.status === 401) return r;
+                        // If HTML/404, try next candidate
+                        const ct = r.headers.get('content-type') || '';
+                        if (r.status !== 404 && !ct.includes('text/html')) {
+                            // Non-HTML error → return it for messaging
+                            return r;
+                        }
+                        lastErr = r;
+                        // continue loop
+                    } catch(e){ lastErr = e; }
+                }
+                if (lastErr instanceof Response) return lastErr;
+                throw new Error('Network error');
+            }
+
+            function el(tag, attrs, text) {
+                const e = document.createElement(tag);
+                if (attrs) Object.assign(e.style, attrs.style || {});
+                if (text) e.textContent = text;
+                return e;
+            }
+            function addMsg(role, content) {
+                const wrap = document.createElement('div');
+                wrap.style.margin = '8px 0';
+                wrap.style.display = 'flex';
+                wrap.style.justifyContent = role === 'user' ? 'flex-end' : 'flex-start';
+                const bubble = document.createElement('div');
+                bubble.textContent = content;
+                bubble.style.maxWidth = '80%';
+                bubble.style.padding = '10px 12px';
+                bubble.style.borderRadius = '12px';
+                bubble.style.boxShadow = '0 1px 2px rgba(0,0,0,.06)';
+                bubble.style.background = role === 'user' ? '#1a7ad9' : '#ffffff';
+                bubble.style.color = role === 'user' ? '#fff' : '#333';
+                wrap.appendChild(bubble);
+                messagesEl.appendChild(wrap);
+                messagesEl.scrollTop = messagesEl.scrollHeight;
+            }
+            function addSources(sources) {
+                if (!sources || !sources.length) return;
+                const wrap = document.createElement('div');
+                wrap.style.margin = '4px 0 10px 0';
+                wrap.style.display = 'flex';
+                wrap.style.justifyContent = 'flex-start';
+                const box = document.createElement('div');
+                box.style.maxWidth = '80%';
+                box.style.padding = '8px 10px';
+                box.style.borderRadius = '10px';
+                box.style.background = '#f1f3f5';
+                box.style.color = '#333';
+                const ul = document.createElement('ul');
+                ul.style.margin = '0'; ul.style.padding = '0 0 0 18px'; ul.style.fontSize = '12px';
+                const title = document.createElement('div');
+                title.textContent = 'Sources:'; title.style.fontWeight = '600'; title.style.marginBottom = '4px';
+                box.appendChild(title);
+                sources.slice(0,3).forEach(s => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = s.link || '#'; a.textContent = s.title || s.displayLink || 'link'; a.target = '_blank'; a.rel = 'noopener';
+                    li.appendChild(a);
+                    ul.appendChild(li);
+                });
+                box.appendChild(ul);
+                wrap.appendChild(box);
+                messagesEl.appendChild(wrap);
+                messagesEl.scrollTop = messagesEl.scrollHeight;
+            }
+            function addTyping() {
+                const id = 'sparqy-typing';
+                if (document.getElementById(id)) return id;
+                const wrap = document.createElement('div');
+                wrap.id = id;
+                wrap.style.margin = '8px 0';
+                wrap.style.display = 'flex';
+                wrap.style.justifyContent = 'flex-start';
+                const bubble = document.createElement('div');
+                bubble.style.maxWidth = '80%';
+                bubble.style.padding = '10px 12px';
+                bubble.style.borderRadius = '12px';
+                bubble.style.boxShadow = '0 1px 2px rgba(0,0,0,.06)';
+                bubble.style.background = '#ffffff';
+                bubble.style.color = '#333';
+                bubble.textContent = 'SparQy is typing…';
+                wrap.appendChild(bubble);
+                messagesEl.appendChild(wrap);
+                messagesEl.scrollTop = messagesEl.scrollHeight;
+                return id;
+            }
+            function removeTyping() {
+                const el = document.getElementById('sparqy-typing');
+                if (el) el.remove();
+            }
+            let sparqyNotFoundNotified = false;
+            async function loadHistory(){
+                try {
+                    // quick health check to surface status
+                    try {
+                        const h = await fetchSparqy('/api/sparqy/health', { credentials: 'include' });
+                        if (h.ok) {
+                            const hj = await h.json();
+                            if (hj && hj.ok) {
+                                // no-op; could display status if desired
+                            }
+                        }
+                    } catch(_){}
+                    const r = await fetchSparqy('/api/sparqy/history', { credentials: 'include' });
+                    if (!r.ok) {
+                        if (r.status === 401) {
+                            addMsg('assistant', 'You’re not signed in. Please log in again.');
+                        } else if (r.status === 404 && !sparqyNotFoundNotified) {
+                            sparqyNotFoundNotified = true;
+                            addMsg('assistant', 'SparQy service not found (404). Try refreshing the page or restarting the portal service to apply updates.');
+                        }
+                        return;
+                    }
+                    const data = await r.json().catch(async ()=>({ messages: [] }));
+                    messagesEl.innerHTML = '';
+                    (data.messages || []).forEach(m => addMsg(m.role, m.content));
+                } catch(e) {}
+            }
+            async function sendMessage(text){
+                addMsg('user', text);
+                addTyping();
+                try {
+            const r = await fetchSparqy('/api/sparqy/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
+                        body: JSON.stringify({ message: text })
+                    });
+                    if (!r.ok) {
+                        if (r.status === 401) {
+                            removeTyping();
+                            addMsg('assistant', 'Session expired. Please sign in again.');
+                            return;
+                        } else if (r.status === 404 && !sparqyNotFoundNotified) {
+                            sparqyNotFoundNotified = true;
+                            removeTyping();
+                            addMsg('assistant', 'SparQy service not found (404). Try refreshing the page or restarting the portal service to apply updates.');
+                            return;
+                        }
+                        let txt;
+                        try { txt = await r.text(); } catch(_) { txt = ''; }
+                        removeTyping();
+                        addMsg('assistant', 'Error: ' + (txt || r.statusText || 'Request failed'));
+                        return;
+                    }
+                    let data;
+                    try {
+                        data = await r.json();
+                    } catch(_) {
+                        removeTyping();
+                        addMsg('assistant', 'Received an unexpected response.');
+                        return;
+                    }
+                    const reply = (data && data.reply) || '…';
+                    removeTyping();
+                    addMsg('assistant', reply);
+                    if (data && Array.isArray(data.sources) && data.sources.length) {
+                        addSources(data.sources);
+                    }
+                } catch(e) {
+                    removeTyping();
+                    addMsg('assistant', 'Network error. Please check connection and try again.');
+                }
+            }
+
+            openBtn?.addEventListener('click', ()=> {
+                panel.style.display = 'block';
+                loadHistory();
+                input?.focus();
+            });
+            closeBtn?.addEventListener('click', ()=> panel.style.display = 'none');
+            form?.addEventListener('submit', (e)=>{
+                e.preventDefault();
+                const text = (input?.value || '').trim();
+                if (!text) return;
+                input.value = '';
+                if (sending) return; // prevent spamming
+                sending = true;
+                sendMessage(text).finally(()=>{ sending = false; input?.focus(); });
+            });
+            // Enter to send, Shift+Enter for newline
+            input?.addEventListener('keydown', (e)=>{
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    form?.dispatchEvent(new Event('submit'));
+                }
+            });
+            clearBtn?.addEventListener('click', async ()=>{
+                try {
+                    const r = await fetchSparqy('/api/sparqy/clear', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
+                        body: JSON.stringify({ threadId: 'default' })
+                    });
+                    if (r.ok) {
+                        messagesEl.innerHTML = '';
+                        // Reload history to seed greeting
+                        loadHistory();
+                    }
+                } catch(_){}
+            });
+        })();
     </script>
-<script>
-  // Override SparqPlug button handler to go straight to app landing via server redirect
-  function openSparqPlugApp(){ window.location.href = "/dashboard"; }
-</script>
+    <script>
+        // Portal UX helpers and fallbacks for live data, only define if not already provided by admin-dashboard.js
+        (function(){
+            const $ = (id) => document.getElementById(id);
+            function candidateFetch(paths, init){
+                const cands = [];
+                paths.forEach(p=>{
+                    const clean = p.startsWith('/')? p : '/' + p;
+                    cands.push(clean);
+                    if (!clean.startsWith('/portal/')) cands.push('/portal' + clean);
+                    try { if (typeof window.__withBase__==='function') cands.push(window.__withBase__(clean.replace(/^\//,''))); } catch(_){ }
+                });
+                let lastErr;
+                return (async ()=>{
+                    for (const url of cands){
+                        try { const r = await fetch(url, init); if (r.ok) return r; lastErr = new Error('HTTP ' + r.status); } catch(e){ lastErr = e; }
+                    }
+                    throw lastErr || new Error('All candidates failed');
+                })();
+            }
+
+                        async function loadStorage(){
+                try {
+                    const r = await candidateFetch(['/api/storage/summary','/api/storage','/metrics/storage']);
+                    const data = await r.json();
+                    if (data){
+                        const total = Number(data.totalGB) || (Number(data.availableGB) + Number(data.allocatedGB));
+                        if (Number.isFinite(total)) $('total-storage').textContent = (total >= 1024 ? (total/1024).toFixed(1)+'TB' : total+'GB');
+                        if (Number.isFinite(data.availableGB)) $('available-storage').textContent = data.availableGB + 'GB';
+                        if (Number.isFinite(data.allocatedGB)) $('allocated-storage').textContent = data.allocatedGB + 'GB';
+                        const usedPct = total ? Math.min(100, Math.max(0, (Number(data.allocatedGB) / total) * 100)) : 0;
+                        const bar = document.querySelector('#storage .progress-fill'); if (bar) bar.style.width = usedPct.toFixed(1) + '%';
+                        // Pools rendering
+                        const pools = data.pools || {};
+                        const poolEl = $('storage-pools');
+                        if (poolEl && pools){
+                            poolEl.innerHTML = '';
+                            const items = [
+                                { key: 'email', label: 'Email', cap: pools.email?.capacityGB, used: (pools.email?.allocatedGB ?? pools.email?.usedGB) },
+                                { key: 'web', label: 'Web Hosting', cap: pools.web?.capacityGB, used: pools.web?.usedGB },
+                                { key: 'content', label: 'Content Storage', cap: pools.content?.capacityGB, used: pools.content?.usedGB },
+                                { key: 'reserve', label: 'System Reserve', cap: pools.reserve?.capacityGB, used: 0 }
+                            ];
+                            items.forEach(it => {
+                                if (it.cap == null) return;
+                                const row = document.createElement('div');
+                                row.className = 'email-item';
+                                const used = Number(it.used)||0;
+                                const pct = it.cap ? Math.min(100, Math.max(0, (used/it.cap)*100)) : 0;
+                                row.innerHTML = `<div class="email-info"><strong>${it.label}</strong><br><small>${used}GB / ${it.cap}GB (${pct.toFixed(1)}%)</small></div>`;
+                                poolEl.appendChild(row);
+                            });
+                        }
+                        const list = $('domain-storage-list');
+                        if (list && Array.isArray(data.domains)){
+                            list.innerHTML = '';
+                            data.domains.forEach(d => {
+                                const row = document.createElement('div');
+                                row.className = 'email-item';
+                                row.innerHTML = `<div class="email-info"><strong>${d.domain||'domain'}</strong><br><small>Allocated: ${d.allocatedGB||0}GB · Used: ${d.usedGB||0}GB</small></div>`;
+                                list.appendChild(row);
+                            });
+                        }
+                    }
+                } catch(_){ /* ignore in UI */ }
+            }
+
+            async function refreshEmailList(){
+                try {
+                    const r = await candidateFetch(['/api/emails','/api/email/accounts']);
+                    const data = await r.json();
+                    const container = $('email-list'); if (!container) return;
+                    const items = Array.isArray(data) ? data : (Array.isArray(data?.accounts) ? data.accounts : []);
+                    if (!items.length) return; // keep seed examples if empty
+                    container.innerHTML = '';
+                    items.forEach(u => {
+                        const row = document.createElement('div');
+                        row.className = 'email-item';
+                        const email = u.email || u.address || '';
+                        const last = u.lastLogin || u.last_seen || '';
+                        const role = u.role || u.type || 'User';
+                        row.innerHTML = `<div class="email-info"><strong>${email}</strong><br><small>${role} - Last login: ${last||'n/a'}</small></div>
+                            <div class="email-actions">
+                                <button class="btn btn-sm btn-primary" onclick="openWebmailForEmail('${email}')">🔑 Login</button>
+                                <button class="btn btn-sm btn-info" onclick="resetPassword('${email}')">🔄 Reset</button>
+                            </div>`;
+                        container.appendChild(row);
+                    });
+                } catch(_){ }
+            }
+
+            async function createNewEmailAccount(){
+                const email = prompt('Enter new email (e.g., user@domain.com):');
+                if (!email) return;
+                try {
+                    const r = await candidateFetch(['/api/emails','/api/email/create'], { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email })});
+                    if (r.ok) { alert('Created: ' + email); refreshEmailList(); } else { alert('Failed to create ('+r.status+').'); }
+                } catch(e){ alert('Network error creating email.'); }
+            }
+
+            function openWebmailForEmail(email){
+                const domain = (email||'').split('@')[1];
+                if (!domain) return;
+                const url = 'https://mail.' + domain;
+                window.open(url, '_blank','noopener');
+            }
+            function accessMelaWebmail(){ window.open('https://mail.melawholefoodsva.com','_blank','noopener'); }
+            function openWebmailPrompt(){ const d = prompt('Enter domain (e.g., example.com):'); if (d) window.open('https://mail.'+d,'_blank','noopener'); }
+            function openEmailManager(){ window.open('/portal/email/admin','_blank','noopener'); }
+            async function resetPassword(email){
+                if (!email) return;
+                if (!confirm('Reset password for ' + email + '?')) return;
+                try {
+                    const r = await candidateFetch(['/api/emails/reset','/api/email/reset'], { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email })});
+                    alert(r.ok ? 'Password reset link sent' : 'Reset failed ('+r.status+').');
+                } catch(_){ alert('Network error resetting password'); }
+            }
+            function manageAlias(alias){ alert('Alias manager not yet implemented for '+alias); }
+
+            async function testDNS(){
+                try {
+                    const r = await candidateFetch(['/api/dns/test','/dns/test']);
+                    const data = await r.json();
+                    alert('DNS test: ' + (data.ok ? 'OK' : 'Issues found'));
+                } catch(_){ alert('DNS test endpoint not available'); }
+            }
+
+            function showUserTab(which){
+                const tabs = ['admin-users','managers','clients','add-user'];
+                tabs.forEach(t => { const el = $(t+'-tab'); if (el) el.style.display = (t===which)? 'block':'none'; });
+            }
+            async function loadClientsList(){
+                try {
+                    const r = await candidateFetch(['/api/clients','/clients']);
+                    const data = await r.json();
+                    const list = $('clients-list'); if (!list) return;
+                    list.innerHTML = '';
+                    const items = Array.isArray(data) ? data : (Array.isArray(data?.clients) ? data.clients : []);
+                    items.forEach(c => {
+                        const div = document.createElement('div');
+                        div.className = 'email-item';
+                        div.innerHTML = `<div class="email-info"><strong>${c.name||c.company||c.email||'Client'}</strong><br><small>${c.domain||''}</small></div>`;
+                        list.appendChild(div);
+                    });
+                } catch(_){ }
+            }
+            async function exportClientsData(){
+                try {
+                    const r = await candidateFetch(['/api/clients/export','/clients/export']);
+                    const blob = await r.blob();
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a'); a.href = url; a.download = 'clients.csv'; a.click();
+                    setTimeout(()=> URL.revokeObjectURL(url), 2000);
+                } catch(_){ alert('Export failed'); }
+            }
+
+            // Only attach to window if not already defined elsewhere
+            if (typeof window.refreshEmailList !== 'function') window.refreshEmailList = refreshEmailList;
+            if (typeof window.createNewEmailAccount !== 'function') window.createNewEmailAccount = createNewEmailAccount;
+            if (typeof window.openWebmailForEmail !== 'function') window.openWebmailForEmail = openWebmailForEmail;
+            if (typeof window.accessMelaWebmail !== 'function') window.accessMelaWebmail = accessMelaWebmail;
+            if (typeof window.openWebmailPrompt !== 'function') window.openWebmailPrompt = openWebmailPrompt;
+            if (typeof window.openEmailManager !== 'function') window.openEmailManager = openEmailManager;
+            if (typeof window.resetPassword !== 'function') window.resetPassword = resetPassword;
+            if (typeof window.manageAlias !== 'function') window.manageAlias = manageAlias;
+            if (typeof window.testDNS !== 'function') window.testDNS = testDNS;
+            if (typeof window.showUserTab !== 'function') window.showUserTab = showUserTab;
+            if (typeof window.loadClientsList !== 'function') window.loadClientsList = loadClientsList;
+            if (typeof window.exportClientsData !== 'function') window.exportClientsData = exportClientsData;
+
+            // On load, refresh storage section once
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', loadStorage);
+            } else { loadStorage(); }
+        })();
+    </script>
 </body>
 </html>

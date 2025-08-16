@@ -3,12 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SparQ Digital - Admin Login</title>
+    <title>SparQ Digital - Dashboard Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-orange: #f59c28;
+            --secondary-orange: #f7b626;
+            --primary-blue: #1a78d8;
+            --secondary-blue: #1a78d8;
+            --white: #ffffff;
+            --black: #000000;
+            --off-white: #f8f9fa;
+            --light-gray: #e9ecef;
+            --dark-gray: #343a40;
+            --gradient-primary: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+        }
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: white;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--gradient-secondary);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -22,10 +36,10 @@
             overflow: hidden;
             width: 100%;
             max-width: 400px;
-            border: 1px solid #e9ecef;
+            border: 1px solid var(--light-gray);
         }
         .login-header {
-            background: linear-gradient(135deg, #da0c43 0%, #0658a5 100%);
+            background: var(--gradient-primary);
             color: white;
             padding: 40px 30px;
             text-align: center;
@@ -54,7 +68,7 @@
             transition: all 0.3s;
         }
         .role-option.active {
-            background: #da0c43;
+            background: #dc3545;
             color: white;
         }
         .form-group {
@@ -76,11 +90,11 @@
         }
         .form-group input:focus {
             outline: none;
-            border-color: #da0c43;
+            border-color: var(--primary-blue);
         }
         .login-btn {
             width: 100%;
-            background: linear-gradient(135deg, #da0c43 0%, #0658a5 100%);
+            background: var(--gradient-primary);
             color: white;
             border: none;
             padding: 15px;
@@ -137,7 +151,7 @@
     <script src="password-peek.js"></script>
     <div class="login-container">
         <div class="login-header">
-            <h1>🚀 SparQ Digital</h1>
+            <h1>🚀 SparQ Digital Media Marketing Company</h1>
         </div>
         
         <div class="login-form">
@@ -167,25 +181,9 @@
             </form>
             
             <div style="text-align: center; margin-top: 20px;">
-                <a href="#" id="forgot-password-link" style="color: #da0c43; text-decoration: none;">
+                <a href="#" id="forgot-password-link" style="color: var(--primary-blue); text-decoration: none;">
                     🔑 Forgot Password?
                 </a>
-            </div>
-            
-            <div class="access-levels">
-                <h4>🔑 Access Levels:</h4>
-                <div class="access-level">
-                    <span><strong>Admin:</strong></span>
-                    <span>Full system access</span>
-                </div>
-                <div class="access-level">
-                    <span><strong>Manager:</strong></span>
-                    <span>Email & domain management</span>
-                </div>
-                <div class="access-level">
-                    <span><strong>Client:</strong></span>
-                    <span>View-only access</span>
-                </div>
             </div>
         </div>
     </div>
@@ -253,9 +251,14 @@
                             window.location.replace(window.__withBase__('change-password'));
                         }, 1000);
                     } else {
-                        // Redirect to dashboard
+                        // Redirect to dashboard or SSO returnTo target
+                        const params = new URLSearchParams(window.location.search);
+                        const sso = params.get('sso');
+                        const rt = params.get('returnTo');
+                        const isSafeRt = rt && /^https:\/\/(sparqplug\.getsparqd\.com|.*\.getsparqd\.com)/.test(rt);
+                        const dest = (sso === '1' && isSafeRt) ? rt : window.__withBase__('dashboard');
                         setTimeout(() => {
-                            window.location.replace(window.__withBase__('dashboard'));
+                            window.location.replace(dest);
                         }, 1000);
                     }
                     
@@ -355,7 +358,7 @@
         });
         
         function showPasswordResetForm() {
-            const resetForm = `
+        const resetForm = `
                 <div style="margin-top: 20px; padding: 20px; background: white; border: 1px solid #e9ecef; border-radius: 8px;">
                     <h4>🔑 Password Reset</h4>
                     <div style="margin: 15px 0;">
@@ -366,7 +369,7 @@
                         <label>Email:</label>
                         <input type="email" id="reset-email" style="width: 100%; padding: 8px; margin: 5px 0;" placeholder="Enter your registered email">
                     </div>
-                    <button id="send-reset" style="background: #da0c43; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            <button id="send-reset" style="background: var(--gradient-primary); color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
                         Send Reset Token
                     </button>
                     <button id="cancel-reset" style="background: #6c757d; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">
@@ -465,28 +468,6 @@
             });
         }
     </script>
-    <!-- SparQ Plug launcher (always-available) -->
-    <div id="sparq-plug-launcher" style="position: fixed; right: 20px; bottom: 20px; z-index: 9999;">
-        <button id="open-sparq-plug" style="background: #1a7ad9; color: white; border: none; padding: 12px 16px; border-radius: 999px; box-shadow: 0 8px 20px rgba(0,0,0,.15); font-weight: 700; cursor: pointer;">
-            ⚡ Open SparQ Plug
-        </button>
-    <a href="https://getsparqd.com/app/" target="_blank" style="display:block; text-align:center; margin-top:8px; color:#1a7ad9; font-weight:600; text-decoration:none;">Open Full App</a>
-    </div>
-    <div id="sparq-plug-panel" style="position: fixed; right: 20px; bottom: 80px; width: 420px; height: 70vh; background: #fff; border-radius: 14px; box-shadow: 0 20px 40px rgba(0,0,0,.2); overflow: hidden; display: none; z-index: 9999;">
-        <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 12px; background:linear-gradient(135deg,#1a7ad9,#da0c43); color:#fff;">
-            <strong>SparQ Plug</strong>
-            <button id="close-sparq-plug" style="background:transparent; border:none; color:#fff; font-size:20px; line-height:20px; cursor:pointer;">×</button>
-        </div>
-    <iframe src="https://getsparqd.com/app/" style="border:0; width:100%; height:calc(100% - 42px);"></iframe>
-    </div>
-    <script>
-        (function(){
-            const openBtn = document.getElementById('open-sparq-plug');
-            const closeBtn = document.getElementById('close-sparq-plug');
-            const panel = document.getElementById('sparq-plug-panel');
-            openBtn?.addEventListener('click', ()=> panel.style.display = 'block');
-            closeBtn?.addEventListener('click', ()=> panel.style.display = 'none');
-        })();
-    </script>
+    
 </body>
 </html>
